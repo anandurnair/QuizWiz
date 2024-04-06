@@ -8,17 +8,17 @@ const Header = () => {
   console.log('current user : ',currentUser);
   return (
     <div className='header'>
-        <div><h2>Quizify</h2></div>
+        <div style={{display:'flex'}}><h1>Q</h1><h2 style={{color:'#2f2f2f',marginTop:'5px'}}>uizify</h2></div>
         <div >
             <ul className='header-list'>
-              <Link href='/home'> <li><p>Quiz</p></li></Link> 
-             <Link href='leaderboard'> <li><p>Leaderboard</p></li></Link>  
+              <Link href='/home' style={{textDecorationLine:'none'}}> <li><p>Quiz</p></li></Link> 
+             <Link href='leaderboard' style={{textDecorationLine:'none'}}> <li><p>Leaderboard</p></li></Link>  
                 
             </ul>
         </div>
         <div className='header-left'>
             <p>{currentUser}</p>
-            <Link href='/'> <h4>Logout</h4></Link>
+            <Link style={{textDecorationLine:'none'}} href='/'> <h4>Logout</h4></Link>
            
         </div>
     </div>

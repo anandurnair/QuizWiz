@@ -1,11 +1,23 @@
 import  dbConnect from '../../../db/mongodb'
 import Questions from '../../../models/questions'
+import Instructors from '../../../models/instructors'
 import { NextResponse } from 'next/server'
 
 export async function POST(req){
-    await dbConnect()
-    const {title,question,option1,option2,option3,option4,correct} = await req.json()
-    console.log('TItile : ',title);
-    await Questions.create({title,question,option1,option2,option3,option4,correct})
+     dbConnect()
+    const {title,questions,currentInstructor} = await req.json()
+    console.log(questions,currentInstructor);
+    console.log("Titile",title);
+    const instructor = await Instructors.findOne({instructorName:currentInstructor})
+    console.log(instructor);
+    await Questions.create({instructorId:instructor._id,title : title ,questions:questions})
     return NextResponse.json({message : 'Question created'},{status: 201})
+}
+
+export async function GET(req){
+    dbConnect()
+    const questions = await Questions.find().populate('instructorId');
+    console.log(questions);
+   return NextResponse.json({ questions }, { status: 200 });
+
 }

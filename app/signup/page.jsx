@@ -33,26 +33,29 @@ const Signup = () => {
     }
 
     return (
-        <div className="">
-            <h2>SignUP</h2>
-            <div className="signup-inputs">
+        <div className="login-page">
+            <div className="login-card">
+            <div className='login-welcome'>
+           <h1>Welcome to QuizWizz</h1>
+        </div>
+            <h2>Create account</h2>
+            <div className="login-inputs">
                 <div className="">
-                    <label htmlFor="username">Enter Username</label>
-                    <input type="text" name="username" onChange={(e) => setUserName(e.target.value)} />
+                    <input type="text" name="username" placeholder="Enter username" onChange={(e) => setUserName(e.target.value)} />
                 </div>
                 <div className="">
-                    <label htmlFor="email">Enter email</label>
-                    <input type="text" name="email" onChange={(e) => setEmail(e.target.value)} />
+                    <input type="text" name="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="">
-                    <label htmlFor="password">Enter password</label>
-                    <input type="text" name="password" onChange={(e) => setPassword(e.target.value)} />
+                    <input type="text" name="password" placeholder="Enter password" onChange={(e) => setPassword(e.target.value)} />
                 </div>
             </div>
-            <div>
+            <div className="login-btns">
                 <button onClick={handleSubmit}>Submit</button>
-                <Link href='/'>Login</Link>
+                <p>Already have an account ? <Link href='/'>Login</Link></p>
             </div>
+            </div>
+            
         </div>
     );
 };

@@ -36,24 +36,28 @@ const Login = () => {
     }
   }
   return (
-    <div className="">
-      <h2>LogIn</h2>
+    <div className="login-page">
+      <div className="login-card">
+        <div className='login-welcome'>
+           <h1>Welcome to QuizWizz</h1>
+        </div>
+      <h2>Log In</h2>
       <div className="login-inputs">
         
         <div className="">
-          <label htmlFor="username">Enter username</label>
-          <input type="text" name="username" onChange={(e)=>setUsername(e.target.value)} />
+          <input type="text" name="username" onChange={(e)=>setUsername(e.target.value)} placeholder='Enter your username'/>
         </div>
         <div className="">
-          <label htmlFor="password">Enter password</label>
-          <input type="text" name="password" onChange={(e)=>setPassword(e.target.value)} />
+          <input type="text" name="password" placeholder='Enter password' onChange={(e)=>setPassword(e.target.value)} />
         </div>
       </div>
-      <div>
+      <div className='login-btns'>
         <button onClick={handlesubmit}>Login</button>
-        <Link href='/signup'>Signup</Link>
+      <p>Create an account ? <Link href='/signup'>Signup</Link> </p>  
       </div>
     </div>
+    </div>
+    
   )
 }
 

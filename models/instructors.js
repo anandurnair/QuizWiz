@@ -2,7 +2,7 @@ import mongoose,{Schema} from 'mongoose'
 
 const instructorSchema = new Schema(
     {
-        username : String,
+        instructorName : String,
         email : String,
         password : String
     }

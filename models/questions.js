@@ -1,15 +1,26 @@
 import mongoose, { Schema } from "mongoose";
-
+import Instructors from "./instructors";
 const questionsSchema = new Schema({
+  instructorId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Instructors",
+    required: true,
+  },
   title: String,
-  question: String,
-  option1: String,
-  option2: String,
-  option3: String,
-  option4: String,
-  correct: String,
+  questions: [
+    {
+      question: String,
+      options: [String],
+      correct: Number,
+    },
+  ],
+  createdAt : {
+    type : Date,
+    default : Date.now
+  }
 });
 
-const Questions = mongoose.models.Questions || mongoose.model("Questions", questionsSchema);
+const Questions =
+  mongoose.models.Questions || mongoose.model("Questions", questionsSchema);
 
 export default Questions;
