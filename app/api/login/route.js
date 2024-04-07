@@ -1,6 +1,7 @@
 import dbConnect from "../../../db/mongodb";
 import Users from "../../../models/user";
 import { NextResponse } from "next/server";
+import bcrypt from 'bcrypt';
 
 export async function POST(req) {
   try {
@@ -9,7 +10,9 @@ export async function POST(req) {
     console.log("TItile : ", username);
     const user = await Users.findOne({ username });
     console.log(user.password);
-    if (user.password === password) {
+    const passwordsMatch = await bcrypt.compare(password, user.password);
+
+    if (passwordsMatch) {
       console.log("Valid password");
       return NextResponse.json({ message: "USer created" }, { status: 200 });
     } else {

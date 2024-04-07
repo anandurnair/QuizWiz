@@ -7,7 +7,7 @@ export async function POST(req){
      dbConnect()
     const {title,questions,currentInstructor} = await req.json()
     console.log(questions,currentInstructor);
-    console.log("Titile",title);
+    console.log("Titile",questions);
     const instructor = await Instructors.findOne({instructorName:currentInstructor})
     console.log(instructor);
     await Questions.create({instructorId:instructor._id,title : title ,questions:questions})

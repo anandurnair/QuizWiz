@@ -1,8 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSelector } from "react-redux";
+import { GrStatusGood } from "react-icons/gr";
 
 const Quiz = ({ params }) => {
+  const { currentUser } = useSelector((state) => state.user);
   const [quizId, setQuizId] = useState("");
   const [quizs, setQuizs] = useState();
   const [activeQuestion, setActiveQuestion] = useState(0);
@@ -83,6 +86,23 @@ const Quiz = ({ params }) => {
     if (activeQuestion !== quizs.questions.length - 1) {
       setActiveQuestion((prev) => prev + 1);
     } else {
+      const postScore = async () => {
+        const res = await fetch("http://localhost:3000/api/scores", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({username : currentUser,quiz:quizId,total :quizs.questions.length,totalScore:result.score,totalCorrect:result.correctAnswers,totalWrong : result.wrongAnswers   }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+        
+          console.log("Worked");
+        } else {
+          console.log("Error");
+        }
+      };
+      postScore();
       setShowResult(true);
     }
     setChecked(false);
@@ -90,12 +110,15 @@ const Quiz = ({ params }) => {
 
   return (
     <div className="main">
-      <h2>{quizId}</h2>
       <div className="quiz">
         <div className="quiz-heading">
           {showResult ? <h2>Result page</h2> : <h2>Quiz page</h2>}
           {showResult ? (
-            "Quiz completed"
+            <div style={{display:'flex',color:'#1db954' ,flexDirection:'row'}}>
+              <h3 style={{marginRight:'10px'}}>Completed</h3>
+              <GrStatusGood fontSize={25} />
+
+            </div>
           ) : (
             <h2>
               Question {activeQuestion + 1} /

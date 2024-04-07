@@ -1,10 +1,42 @@
-'use client'
+"use client";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { GrStatusGood } from "react-icons/gr";
 
 const CreateQuiz = () => {
-  const {currentInstructor} = useSelector(state => state.instructor)
+  const [updateData,setUpdateData] = useState(false)
+  const [currentInstructor, setCurrentInstructor] = useState();
 
+  useEffect(()=>{
+    if(updateData){
+      const postData = async () => {
+        console.log("Questions : ", questions);
+        try {
+          const res = await fetch("http://localhost:3000/api/questions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ title, questions, currentInstructor }),
+          });
+          if (res.ok) {
+            console.log("Successfully saved");
+            router.push("/instructor/dashboard");
+          } else {
+            console.log("Error occurred while saving");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+      postData();
+    }
+  },[updateData])
+  useEffect(() => {
+    setCurrentInstructor(sessionStorage.getItem("currentInstructor"));
+  }, []);
+  const router = useRouter();
   const [singleQuestion, setSingleQuestion] = useState({
     question: "",
     option1: "",
@@ -13,8 +45,9 @@ const CreateQuiz = () => {
     option4: "",
     correct: "",
   });
+
   const [questions, setQuestions] = useState([]);
-  const [title, setTitle] = useState(""); 
+  const [title, setTitle] = useState("");
   const [isTitle, setIsTitle] = useState(false);
 
   const handleChange = (e) => {
@@ -25,64 +58,65 @@ const CreateQuiz = () => {
     }));
   };
 
-  const handleNext = (e) => { 
-    e.preventDefault();
-    const newQuestion = {
-      question: singleQuestion.question,
-      options: [singleQuestion.option1, singleQuestion.option2, singleQuestion.option3, singleQuestion.option4],
-      correct: singleQuestion.correct
-    };
-    setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
-    setSingleQuestion({
-      question: "",
-      option1: "",
-      option2: "",
-      option3: "",
-      option4: "",
-      correct: "",
-    });
+  const handleNext = (e) => {
+    if (
+      singleQuestion.question != "" &&
+      singleQuestion.option1 != "" &&
+      singleQuestion.option2 != "" &&
+      singleQuestion.option3 != "" &&
+      singleQuestion.option4 != ""
+    ) {
+      e.preventDefault();
+      console.log("Length : ", questions.length);
+      const newQuestion = {
+        question: singleQuestion.question,
+        options: [
+          singleQuestion.option1,
+          singleQuestion.option2,
+          singleQuestion.option3,
+          singleQuestion.option4,
+        ],
+        correct: singleQuestion.correct,
+      };
+      setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
+      setSingleQuestion({
+        question: "",
+        option1: "",
+        option2: "",
+        option3: "",
+        option4: "",
+        correct: "",
+      });
+    } else {
+      alert("Please fill the question");
+    }
   };
-  
+
   const handleCreateQuestion = (e) => {
     e.preventDefault();
     setIsTitle(true);
-  }
+  };
 
-  const handleFinish =async () => {
+  const handleFinish = async () => {
     if (!isTitle) {
-      // If the title is not provided, don't finish
       return;
     }
-  
-    // Add the current question to the questions array
+
     const newQuestion = {
       question: singleQuestion.question,
-      options: [singleQuestion.option1, singleQuestion.option2, singleQuestion.option3, singleQuestion.option4],
-      correct: singleQuestion.correct
+      options: [
+        singleQuestion.option1,
+        singleQuestion.option2,
+        singleQuestion.option3,
+        singleQuestion.option4,
+      ],
+      correct: singleQuestion.correct,
     };
-  
-    // Update the questions array
-    await setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
 
-    try {
-      const res = await fetch('http://localhost:3000/api/questions', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({title,questions,currentInstructor})
-      });
-      if(res.ok){
-          console.log('Sucessfully ');
-      }else{
-          console.log('error');
-      }
-      
-  } catch (error) {
-      console.error('Error:', error);
-  }
-  
-    // Clear the singleQuestion state
+    setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
+
+    setUpdateData(true)
+
     setSingleQuestion({
       question: "",
       option1: "",
@@ -93,17 +127,21 @@ const CreateQuiz = () => {
     });
   };
 
- 
   return (
-    <div className="create-quiz">
+    <div className="main">
       <h2>Create quiz</h2>
-      <div className="create-box">
-        <h2>Create quiz</h2>
+      <div className="quiz">
+        <div className="create-quiz-heading">
+          {" "}
+          <h2>Create quiz</h2>
+        </div>
+
         <div className="create-inputs">
           {!isTitle ? (
             <div className="title-input">
               <label htmlFor="title">Enter Title</label>
               <input
+                placeholder="Enter quiz title"
                 type="text"
                 name="title"
                 value={title}
@@ -112,6 +150,7 @@ const CreateQuiz = () => {
             </div>
           ) : (
             <>
+              <h2>Question no : {questions.length + 1}</h2>
               <div className="title-input">
                 <label htmlFor="question">Enter Question</label>
                 <input
@@ -173,8 +212,20 @@ const CreateQuiz = () => {
             </>
           )}
           <div className="create-btns">
-           { !isTitle ? <button onClick={handleCreateQuestion}>Next</button> : ( <><button onClick={handleNext}>Next</button>
-            <button onClick={handleFinish}>Finish</button></>) }
+            {!isTitle ? (
+              <button className="btn" onClick={handleCreateQuestion}>
+                Next
+              </button>
+            ) : (
+              <>
+                <button className="btn" onClick={handleNext}>
+                  Next
+                </button>
+                <button className="btn" onClick={handleFinish}>
+                  Finish
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

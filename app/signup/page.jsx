@@ -11,25 +11,30 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(username, email, password);
-        try {
-            const res = await fetch('http://localhost:3000/api/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, email, password })
-            });
-            if(res.ok){
-                console.log('Sucessfully ');
-                router.push('/home')
-            }else{
-                console.log('error');
+        if(username != '' &&  email != '' &&  password != '' ){
+            try {
+                const res = await fetch('http://localhost:3000/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, email, password })
+                });
+                if(res.ok){
+                    console.log('Sucessfully ');
+                    sessionStorage.setItem('currentUser',username)
+                    router.push('/home')
+                }else{
+                    console.log('error');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
             }
-            
-        } catch (error) {
-            console.error('Error:', error);
+        }else{
+            alert('Please fill the form')
         }
+       
     }
 
     return (
@@ -41,13 +46,13 @@ const Signup = () => {
             <h2>Create account</h2>
             <div className="login-inputs">
                 <div className="">
-                    <input type="text" name="username" placeholder="Enter username" onChange={(e) => setUserName(e.target.value)} />
+                    <input type="text" name="username" placeholder="Enter username" onChange={(e) => setUserName(e.target.value)} required />
                 </div>
                 <div className="">
-                    <input type="text" name="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
+                    <input type="text" name="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} required />
                 </div>
                 <div className="">
-                    <input type="text" name="password" placeholder="Enter password" onChange={(e) => setPassword(e.target.value)} />
+                    <input type="text" name="password" placeholder="Enter password" onChange={(e) => setPassword(e.target.value)}  required/>
                 </div>
             </div>
             <div className="login-btns">

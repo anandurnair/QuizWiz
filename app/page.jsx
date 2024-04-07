@@ -23,6 +23,7 @@ const Login = () => {
         });
         if(res.ok){
            dispatch(updateUser(username))
+            sessionStorage.setItem('currentUser',username)
             console.log('Sucessfully ');
             router.push('/home')
         }else{
@@ -45,10 +46,10 @@ const Login = () => {
       <div className="login-inputs">
         
         <div className="">
-          <input type="text" name="username" onChange={(e)=>setUsername(e.target.value)} placeholder='Enter your username'/>
+          <input type="text" name="username" onChange={(e)=>setUsername(e.target.value)} placeholder='Enter your username' required/>
         </div>
         <div className="">
-          <input type="text" name="password" placeholder='Enter password' onChange={(e)=>setPassword(e.target.value)} />
+          <input type="text" name="password" placeholder='Enter password' onChange={(e)=>setPassword(e.target.value)} required />
         </div>
       </div>
       <div className='login-btns'>

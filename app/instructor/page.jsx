@@ -1,4 +1,5 @@
 'use client'
+import '../../style/globals.scss'
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/navigation'
@@ -23,6 +24,7 @@ const InstructorLogin = () => {
           if(res.ok){
              dispatch(updateInstructor(instructorName))
               console.log('Sucessfully ');
+              sessionStorage.setItem('currentInstructor',instructorName)
               router.push('/instructor/dashboard')
           }else{
             alert('Invalid password')
@@ -35,30 +37,42 @@ const InstructorLogin = () => {
       }
     }
   return (
-    <div className="">
+    <div className="login-page">
+      <div className="login-card">
+      <div className='login-welcome'>
+           <h1>Welcome to QuizWizz</h1>
+        </div>
       <h2>Instructor LogIn</h2>
+
       <div className="login-inputs">
         <div className="">
-          <label htmlFor="instructorName">Enter InstrutorName</label>
           <input
+          placeholder='Enter instructor name'
             type="text"
             name="instructorName"
             onChange={(e) => setInstructorName(e.target.value)}
+            required
           />
         </div>
         <div className="">
-          <label htmlFor="password">Enter password</label>
           <input
+          placeholder='Enter password'
             type="text"
             name="password"
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
       </div>
       <div>
+        <div className="login-btns">
+
         <button onClick={handlesubmit}>Login</button>
-        <Link href="/signup">Signup</Link>
+        <Link href="/instructor/signup">Signup</Link>
+        </div>
       </div>
+      </div>
+      
     </div>
   );
 };

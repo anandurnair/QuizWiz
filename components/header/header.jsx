@@ -1,14 +1,16 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import { useSelector } from 'react-redux';
 
 const Header = () => {
-  const {currentUser} = useSelector(state => state.user)
-  console.log('current user : ',currentUser);
+  const [currentUser,setCurrentUser] = useState()
+  useEffect(()=>{
+    setCurrentUser(sessionStorage.getItem('currentUser'))    
+  },[])  
   return (
     <div className='header'>
-        <div style={{display:'flex'}}><h1>Q</h1><h2 style={{color:'#2f2f2f',marginTop:'5px'}}>uizify</h2></div>
+        <div style={{display:'flex'}}><h1>Q</h1><h2 style={{color:'#2f2f2f',marginTop:'5px'}}>uizwiz</h2></div>
         <div >
             <ul className='header-list'>
               <Link href='/home' style={{textDecorationLine:'none'}}> <li><p>Quiz</p></li></Link> 

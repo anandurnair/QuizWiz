@@ -6,9 +6,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function Home() {
-  const router = useRouter()
-  const { currentUser } = useSelector((state) => state.user);
-
+  const router = useRouter();
+  // const { currentUser } = useSelector((state) => state.user);
   const [quizes, setQuizes] = useState([]);
 
   useEffect(() => {
@@ -40,7 +39,7 @@ export default function Home() {
   }, [quizes]);
   const handleQuiz = async (quizId) => {
     console.log("Quiz id : ", quizId);
-    router.push(`/quiz/${quizId}`)
+    router.push(`/quiz/${quizId}`);
   };
   return (
     <main>
@@ -50,18 +49,22 @@ export default function Home() {
             <h1>Welcome to QuizWizz</h1>
           </div>
           <h2>Choose a quiz</h2>
-          <Link href="/quiz">
+          {/* <Link href="/quiz">
             <button className="btn">Start quiz</button>
-          </Link>
+          </Link> */}
           <div className="quiz-list">
             {quizes &&
-              quizes.map((quiz) => (
+              quizes.map((quiz, index) => (
                 <div
                   className="quiz-card"
                   key={quiz._id}
                   onClick={() => handleQuiz(quiz._id)}
                 >
-                  <h2>{quiz.title}</h2>
+                  <div style={{display:'flex',}}>
+                    <h3 style={{marginRight:'20px'}}>{index +1}</h3>
+                    <h3>{quiz.title}</h3>
+                  </div>
+                  
                   <div>
                     <p>{quiz.instructorId.instructorName}</p>
                   </div>
