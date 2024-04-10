@@ -11,7 +11,10 @@ const questionsSchema = new Schema({
     {
       question: String,
       options: [String],
-      correct: Number,
+      correct: {
+        type : Number,
+        default : 1
+      }
     },
   ],
   createdAt : {

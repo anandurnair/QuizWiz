@@ -21,7 +21,7 @@ const CreateQuiz = () => {
             body: JSON.stringify({ title, questions, currentInstructor }),
           });
           if (res.ok) {
-            console.log("Successfully saved");
+            alert('Succussfully inserted')
             router.push("/instructor/dashboard");
           } else {
             console.log("Error occurred while saving");
@@ -43,7 +43,7 @@ const CreateQuiz = () => {
     option2: "",
     option3: "",
     option4: "",
-    correct: "",
+    correct: 1,
   });
 
   const [questions, setQuestions] = useState([]);

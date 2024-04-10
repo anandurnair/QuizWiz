@@ -1,9 +1,11 @@
 'use client'
+import TransferData from "@/app/(home)/transfer/page";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initial_state = {
   currentUser: null,
   userLogged: false,
+  correctAnswewr :null
 };
 
 const userslice = createSlice({
@@ -14,6 +16,9 @@ const userslice = createSlice({
       state.currentUser = action.payload;
       state.userLogged = true;
     },
+    transferData:(state,action)=>{
+        state.correctAnswewr = action.payload;
+    }
   },
 });
 

@@ -25,6 +25,7 @@ const InstructorSignup = () => {
                 sessionStorage.setItem('currentInstructor',instructorName)
                 router.push('/instructor/dashboard')
             }else{
+                alert('Instructor already exists')
                 console.log('error');
             }
             
@@ -56,7 +57,7 @@ const InstructorSignup = () => {
             </div>
             <div>
                 <button className='btn' onClick={handleSubmit}>Submit</button>
-                <Link href='/instructor'>Login</Link>
+                <p>Already have an account ? <Link href='/instructor'>Login</Link></p>    
             </div>
             </div>
         </div>

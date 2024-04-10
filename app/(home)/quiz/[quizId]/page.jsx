@@ -1,10 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { GrStatusGood } from "react-icons/gr";
 
 const Quiz = ({ params }) => {
+  const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   const [quizId, setQuizId] = useState("");
   const [quizs, setQuizs] = useState();
@@ -21,7 +22,7 @@ const Quiz = ({ params }) => {
     correctAnswers: 0,
     wrongAnswers: 0,
   });
-
+  const [storeAnswer, setStoreAnswers] = useState([]);
   useEffect(() => {
     setQuizId(params.quizId);
     const fetchData = async () => {
@@ -34,7 +35,7 @@ const Quiz = ({ params }) => {
       });
       if (res.ok) {
         const data = await res.json();
-        if (Object.keys(data.quiz).length !== 0) {
+        if (data?.quiz && Object.keys(data.quiz).length !== 0) {
           setQuizs(data.quiz);
           console.log("Data : ", data.quiz);
         }
@@ -57,10 +58,11 @@ const Quiz = ({ params }) => {
   }, [quizs, activeQuestion]);
 
   const handleClickAnswers = (ans, idx) => {
-    console.log('Index' , idx , 'answer : ',correct);
+    console.log("Index", idx, "answer : ", correct);
     setChecked(true);
+    setStoreAnswers((prev) => [...prev, idx]);
     setSelectedAnswerIndex(idx);
-    if (idx == correct) {
+    if (idx + 1 == correct) {
       setSelectedAnswer(true);
       console.log("true");
     } else {
@@ -92,11 +94,18 @@ const Quiz = ({ params }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({username : currentUser,quiz:quizId,total :quizs.questions.length,totalScore:result.score,totalCorrect:result.correctAnswers,totalWrong : result.wrongAnswers   }),
+          body: JSON.stringify({
+            username: currentUser,
+            quiz: quizId,
+            total: quizs.questions.length,
+            totalScore: result.score,
+            totalCorrect: result.correctAnswers,
+            totalWrong: result.wrongAnswers,
+          }),
         });
         if (res.ok) {
           const data = await res.json();
-        
+
           console.log("Worked");
         } else {
           console.log("Error");
@@ -105,19 +114,25 @@ const Quiz = ({ params }) => {
       postScore();
       setShowResult(true);
     }
+    // dispatch()
     setChecked(false);
   };
-
+  const handleTransfer = () => {};
   return (
     <div className="main">
       <div className="quiz">
         <div className="quiz-heading">
           {showResult ? <h2>Result page</h2> : <h2>Quiz page</h2>}
           {showResult ? (
-            <div style={{display:'flex',color:'#1db954' ,flexDirection:'row'}}>
-              <h3 style={{marginRight:'10px'}}>Completed</h3>
+            <div
+              style={{
+                display: "flex",
+                color: "#1db954",
+                flexDirection: "row",
+              }}
+            >
+              <h3 style={{ marginRight: "10px" }}>Completed</h3>
               <GrStatusGood fontSize={25} />
-
             </div>
           ) : (
             <h2>
@@ -164,19 +179,23 @@ const Quiz = ({ params }) => {
             </div>
           ) : (
             <div className="quiz-container result-page">
-              <p>Total questions : {quizs.questions.length}</p>
-              <p>
+              <h2>Total questions : {quizs.questions.length}</h2>
+              <h2>
                 Total Score : <span>{result.score}</span>
-              </p>
-              <p>
+              </h2>
+              <h2>
                 Correct answers : <span>{result.correctAnswers}</span>
-              </p>
-              <p>
+              </h2>
+              <h2>
                 Wrong answers : <span>{result.wrongAnswers}</span>
-              </p>
+              </h2>
               <Link href="/home">
                 <button className="btn">Try again</button>
               </Link>
+
+              <button className="btn" onClick={handleTransfer}>
+                Transfer data
+              </button>
             </div>
           )}
         </div>

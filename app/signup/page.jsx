@@ -25,7 +25,7 @@ const Signup = () => {
                     sessionStorage.setItem('currentUser',username)
                     router.push('/home')
                 }else{
-                    console.log('error');
+                    alert('user already exists')
                 }
                 
             } catch (error) {
